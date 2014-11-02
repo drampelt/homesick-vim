@@ -1,0 +1,195 @@
+" set nocursorline " don't highlight current line
+"
+" " keyboard shortcuts
+" inoremap jj <ESC>
+"
+" " highlight search
+" "set hlsearch
+" "nmap <leader>hl :let @/ = ""<CR>
+"
+" " gui settings
+" if (&t_Co == 256 || has('gui_running'))
+"   if ($TERM_PROGRAM == 'iTerm.app')
+"     colorscheme solarized
+"   else
+"     colorscheme desert
+"   endif
+" endif
+"
+" Disambiguate ,a & ,t from the Align plugin, making them fast again.
+"
+" This section is here to prevent AlignMaps from adding a bunch of mappings
+" that interfere with the very-common ,a and ,t mappings. This will get run
+" at every startup to remove the AlignMaps for the *next* vim startup.
+"
+" If you do want the AlignMaps mappings, remove this section, remove
+" ~/.vim/bundle/Align, and re-run rake in maximum-awesome.
+function! s:RemoveConflictingAlignMaps()
+  if exists("g:loaded_AlignMapsPlugin")
+    AlignMapsClean
+  endif
+endfunction
+command! -nargs=0 RemoveConflictingAlignMaps call s:RemoveConflictingAlignMaps()
+silent! autocmd VimEnter * RemoveConflictingAlignMaps
+
+"""Automatics"""
+
+" Automatically cd into the directory that the file is in
+autocmd BufEnter * execute "chdir ".escape(expand("%:p:h"), ' ')
+
+" Remove any trailing whitespace that is in the file
+autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+
+" Restore cursor position to where it was before
+augroup JumpCursorOnEdit
+   au!
+   autocmd BufReadPost *
+            \ if expand("<afile>:p:h") !=? $TEMP |
+            \   if line("'\"") > 1 && line("'\"") <= line("$") |
+            \     let JumpCursorOnEdit_foo = line("'\"") |
+            \     let b:doopenfold = 1 |
+            \     if (foldlevel(JumpCursorOnEdit_foo) > foldlevel(JumpCursorOnEdit_foo - 1)) |
+            \        let JumpCursorOnEdit_foo = JumpCursorOnEdit_foo - 1 |
+            \        let b:doopenfold = 2 |
+            \     endif |
+            \     exe JumpCursorOnEdit_foo |
+            \   endif |
+           \ endif
+   " Need to postpone using "zv" until after reading the modelines.
+   autocmd BufWinEnter *
+            \ if exists("b:doopenfold") |
+            \   exe "normal zv" |
+            \   if(b:doopenfold > 1) |
+            \       exe  "+".1 |
+            \   endif |
+            \   unlet b:doopenfold |
+            \ endif
+augroup END
+
+au BufNewFile,BufRead *.hbs set filetype=html
+au BufNewFile,BufRead *.jbuilder set filetype=ruby
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+"""Global variables/settings"""
+
+let g:EasyMotion_do_mapping = 0          " Disable default mappings
+let g:EasyMotion_smartcase = 1
+let g:NERDTreeChDirMode = 2              " Vim's cwd follows NERDTree's cwd.
+let g:NERDTreeMapJumpFirstChild = "ge"
+let g:NERDTreeMapJumpLastChild = "gn"
+let g:NERDTreeMapOpenExpl = ""
+let g:NERDTreeMapOpenSplit = "S"
+let g:NERDTreeMapToggleHidden = "H"
+let g:NERDTreeQuitOnOpen = 0             " Stay open.
+let g:ctrlp_use_caching = 0
+" let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+let g:tcommentTextObjectInlineComment='<c-i>'
+let g:mapleader=","
+
+"""Options"""
+
+" Vim Display.
+set t_Co=256                         " 256 Colors.
+set shortmess+=I                     " Hide splash screen.
+set display+=lastline                " Show partial lines.
+set showtabline=1                    " Show tabs only when multiple tabs are open.
+set backspace=2
+set textwidth=0
+" Text Display.
+syntax on                            " Syntax highlighting.
+set number                           " Show line numbers.
+set guicursor+=a:blinkon0            " Turn cursor blinking off.
+set hlsearch                         " Search highlighting.
+set wrap                             " Wrapping on.
+set lbr                              " Wrap at word.
+set showbreak=···\                   " Line break indicator.
+" Two-space tabs.
+set expandtab                        " Use spaces.
+set smarttab
+" Editing.
+set autoindent                       " Keep line indentation.
+set whichwrap+=<,>,h,l,b,s,[,]       " Backspace and arrows can wrap to previous/next line.
+set splitbelow|set splitright        " Open new splits below and to the right.
+" Searching and matching.
+set incsearch                        " Incremental searching.
+set ignorecase|set smartcase         " Ignore case when only lowercase letters are used.
+set gdefault                         " Substitute all matches in a line (i.e. :s///g) by default.
+set showmatch                        " When a bracket is interted, flash the matching one.
+" System.
+set mouse=a                          " Enable the mouse in all possible modes.
+set t_RV=1
+set history=1000                     " Keep 1000 lines of command line history.
+set wildmenu                         " Tab completion on.
+set wildmode=longest,full            " Tab complete longest common string, then each full match.
+au BufEnter * set ignorecase
+set nohidden
+set laststatus=2
+
+""" Colemak-Vim Mappings"""
+" - k/K is the new n/N.
+" - s/S is the new i/I ["inSert"].
+" - j/J is the new e/E ["Jump" to EOW].
+"
+" - l/L skip to the beginning and end of lines
+" - Ctrl-l joins lines
+" - r replaces i as the "inneR" modifier
+
+" HNEI arrows. Swap 'gn'/'ge' and 'n'/'e'.
+noremap n gj
+noremap e gk
+noremap i l
+noremap gn j
+noremap ge k
+" Last search.
+nnoremap k n
+nnoremap K N
+" BOL/EOL/Join Lines.
+noremap l ^
+noremap L $
+noremap <C-l> J
+" _r_ = inneR text objects.
+onoremap r i
+" Switch tabs.
+nnoremap <C-i> <C-PageDown>|nnoremap <C-h> <C-PageUp>
+" SwiS1S1tch panes.
+noremap H <C-w>h|noremap I <C-w>l|noremap N <C-w>j|noremap E <C-w>k
+" Scroll up/down.
+noremap = <C-y>|noremap - <C-e>
+nnoremap p p=`]
+
+"""Misc Mappings"""
+
+noremap <space> i
+nnoremap ; :
+nnoremap : ;
+inoremap jj <Esc>
+nnoremap <silent> jj :noh<CR>
+noremap U <C-r>
+vnoremap s S
+nnoremap <CR> o<Esc>
+noremap <silent> _ :TComment<CR>
+noremap <silent> <Leader>aa :Tabularize /:<CR>
+nmap f <Plug>(easymotion-s)
+nnoremap <silent> <Leader><Leader> :NERDTreeTabsToggle<CR>
+
+"""Colors and GUI specifics"""
+
+set background=dark
+colorscheme solarized
+
+if has('gui_running')
+    set tabstop=2|set softtabstop=2
+    set shiftwidth=2
+    set guioptions-=L
+    set guioptions-=T
+    set guioptions-=r
+    set guioptions-=m
+    set guifont=Ubuntu\ Mono:h14
+else
+    set tabstop=2|set softtabstop=2
+    set shiftwidth=2
+endif
