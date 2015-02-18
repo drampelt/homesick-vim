@@ -93,6 +93,7 @@ let g:ctrlp_use_caching = 0
 let g:tcommentTextObjectInlineComment='<c-i>'
 let g:mapleader=","
 let &colorcolumn="80,".join(range(120,999),",")
+let g:snips_trigger_key="<Leader><Tab>"
 
 """Options"""
 
@@ -181,8 +182,14 @@ noremap <silent> <Leader>aa :Tabularize /^[^:]*\zs:<CR>
 noremap <silent> <Leader>as :sort<CR>
 nmap f <Plug>(easymotion-s)
 nnoremap <silent> <Leader><Leader> :NERDTreeTabsToggle<CR>
-nnoremap <Leader>cc :!clang -Wall *.c && ./a.out<CR>
+nnoremap <Leader>cc :!clang -Wall *.(c\|o) && ./a.out<CR>
+nnoremap <Leader>tc :!clang -Wall ../*.(c\|o) && ./a.out < %:r.in > out.txt && diff %:r.expect out.txt<CR>
 nnoremap <Leader>cr :!racket %<CR>
+" imap <C-u> <Plug>snipMateNextOrTrigger
+" imap <C-h> <Left>
+" imap <C-n> <Down>
+" imap <C-e> <Up>
+" imap <C-i> <Right>
 
 """Colors and GUI specifics"""
 
