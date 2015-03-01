@@ -182,9 +182,11 @@ noremap <silent> <Leader>aa :Tabularize /^[^:]*\zs:<CR>
 noremap <silent> <Leader>as :sort<CR>
 nmap f <Plug>(easymotion-s)
 nnoremap <silent> <Leader><Leader> :NERDTreeTabsToggle<CR>
-nnoremap <Leader>cc :!clang -Wall *.(c\|o) && ./a.out<CR>
-nnoremap <Leader>tc :!clang -Wall ../*.(c\|o) && ./a.out < %:r.in > out.txt && diff %:r.expect out.txt<CR>
+nnoremap <Leader>cc :!clang -Wall --coverage *.(c\|o) && ./a.out<CR>
+nnoremap <Leader>tc :AsyncShell clang -Wall --coverage ../*.(c\|o) && ./a.out < %:r.in > out.txt && diff %:r.expect out.txt<CR>
 nnoremap <Leader>cr :!racket %<CR>
+nnoremap <Leader>gc :AsyncShell gcov % && cat %.gcov<CR>
+nnoremap <Leader>ig :IndentGuidesToggle<CR>
 " imap <C-u> <Plug>snipMateNextOrTrigger
 " imap <C-h> <Left>
 " imap <C-n> <Down>
