@@ -95,6 +95,22 @@ let g:mapleader=","
 let &colorcolumn="80,".join(range(120,999),",")
 let g:snips_trigger_key="<Leader><Tab>"
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_scss_checkers = ['scss_lint']
+let g:syntastic_scss_scss_lint_args = "--config /Users/daniel/chalk/chalk-api/web/.scss-lint.yml"
+let g:syntastic_coffee_checkers = ['coffeelint']
+let g:syntastic_coffee_coffeelint_args = "--reporter csv --file /Users/daniel/chalk/chalk-api/web/coffeelint.json"
+let g:syntastic_ruby_checkers = ['rubocop', 'reek']
+let g:syntastic_error_symbol = "❌"
+let g:syntastic_style_error_symbol = "❌"
+let g:syntastic_warning_symbol = "⚡"
+let g:syntastic_style_warning_symbol = "⚡"
+
+let g:coffee_cute = 1
+
 """Options"""
 
 " Vim Display.
@@ -184,9 +200,12 @@ nmap f <Plug>(easymotion-s)
 nnoremap <silent> <Leader><Leader> :NERDTreeTabsToggle<CR>
 nnoremap <Leader>cc :!clang -Wall --coverage *.(c\|o) && ./a.out<CR>
 nnoremap <Leader>tc :AsyncShell clang -Wall --coverage ../*.(c\|o) && ./a.out < %:r.in > out.txt && diff %:r.expect out.txt<CR>
+nnoremap <Leader>tr :RunRubyFocusedContext<CR>
 nnoremap <Leader>cr :!racket %<CR>
 nnoremap <Leader>gc :AsyncShell gcov % && cat %.gcov<CR>
 nnoremap <Leader>ig :IndentGuidesToggle<CR>
+nnoremap <Leader>tb :TagbarToggle<CR>
+nnoremap <Leader>st :SyntasticCheck<CR>
 " imap <C-u> <Plug>snipMateNextOrTrigger
 " imap <C-h> <Left>
 " imap <C-n> <Down>
@@ -198,6 +217,57 @@ nnoremap <Leader>ig :IndentGuidesToggle<CR>
 set background=dark
 colorscheme smyck
 hi ColorColumn ctermbg=black guibg=#323232
+hi SyntasticWarningSign ctermbg=NONE guibg=NONE
+hi SyntasticErrorSign ctermbg=4 guibg=#73B2CF
+
+set guifont=Droid\ Sans\ Mono\ for\ Powerline:h10
+let g:Powerline_symbols = 'fancy'
+set encoding=utf-8
+set t_Co=256
+set fillchars+=stl:\ ,stlnc:\
+set term=xterm-256color
+set termencoding=utf-8
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" unicode symbols
+" let g:airline_left_sep = '»'
+" let g:airline_left_sep = '▶'
+" let g:airline_right_sep = '«'
+" let g:airline_right_sep = '◀'
+" let g:airline_symbols.linenr = '␊'
+" let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+" let g:airline_symbols.paste = 'Þ'
+" let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" powerline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+" old vim-powerline symbols
+" let g:airline_left_sep = '⮀'
+" let g:airline_left_alt_sep = '⮁'
+" let g:airline_right_sep = '⮂'
+" let g:airline_right_alt_sep = '⮃'
+" let g:airline_symbols.branch = '⭠'
+" let g:airline_symbols.readonly = '⭤'
+" let g:airline_symbols.linenr = '⭡'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+
+set fillchars=
 
 if has('gui_running')
     set tabstop=2|set softtabstop=2
