@@ -32,6 +32,8 @@ endfunction
 command! -nargs=0 RemoveConflictingAlignMaps call s:RemoveConflictingAlignMaps()
 silent! autocmd VimEnter * RemoveConflictingAlignMaps
 
+set rtp+=/usr/local/opt/fzf
+
 """Automatics"""
 
 " Automatically cd into the directory that the file is in
@@ -189,6 +191,14 @@ noremap H <C-w>h|noremap I <C-w>l|noremap N <C-w>j|noremap E <C-w>k
 noremap = <C-y>|noremap - <C-e>
 nnoremap p p=`]
 
+" Tmux
+let g:tmux_navigator_no_mappings = 1
+" nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+" nnoremap <silent> <c-n> :TmuxNavigateDown<cr>
+" nnoremap <silent> <c-e> :TmuxNavigateUp<cr>
+" nnoremap <silent> <c-i> :TmuxNavigateRight<cr>
+" nnoremap <silent> <c-\> :TmuxNavigatePrevious<cr>
+
 """Misc Mappings"""
 
 noremap <space> i
@@ -212,6 +222,8 @@ nnoremap <Leader>gc :AsyncShell gcov % && cat %.gcov<CR>
 nnoremap <Leader>ig :IndentGuidesToggle<CR>
 nnoremap <Leader>tb :TagbarToggle<CR>
 nnoremap <Leader>st :SyntasticCheck<CR>
+nnoremap <Leader>tf :TableFormat<CR>
+nnoremap <C-p> :FZF<CR>
 " imap <C-u> <Plug>snipMateNextOrTrigger
 " imap <C-h> <Left>
 " imap <C-n> <Down>
@@ -272,6 +284,8 @@ let g:airline_symbols.linenr = ''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
+
+let g:airline#extensions#tabline#fnamemod = ':t'
 
 set fillchars=
 

@@ -1,0 +1,43 @@
+""" Colemak-Vim Mappings"""
+" - k/K is the new n/N.
+" - s/S is the new i/I ["inSert"].
+" - j/J is the new e/E ["Jump" to EOW].
+"
+" - l/L skip to the beginning and end of lines
+" - Ctrl-l joins lines
+" - r replaces i as the "inneR" modifier
+
+" HNEI arrows. Swap 'gn'/'ge' and 'n'/'e'.
+noremap n gj
+noremap e gk
+noremap i l
+noremap gn j
+noremap ge k
+" Last search.
+nnoremap k n
+nnoremap K N
+" BOL/EOL/Join Lines.
+noremap l ^
+noremap L $
+noremap <C-l> J
+" _r_ = inneR text objects.
+onoremap r i
+" Switch tabs.
+nnoremap <C-i> :action NextTab<CR>
+nnoremap <C-h> :action PreviousTab<CR>
+
+"""Misc Mappings"""
+
+nnoremap <space> i
+nnoremap ; :
+nnoremap : ;
+inoremap jj <Esc>
+nnoremap <silent> jj :noh<CR>
+noremap U <C-r>
+vmap s S
+nnoremap <CR> o<Esc>
+nnoremap p p=`]
+map s %
+nnoremap <silent> S :w<CR>
+"inoremap <C-y>, :action Emmet<CR>
+"inoremap <C-y>n :action EmmetNextEditPoint<CR>
