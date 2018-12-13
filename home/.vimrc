@@ -1,5 +1,4 @@
 call plug#begin('~/.vim/plugged')
-
 Plug 'tpope/vim-sensible'
 Plug 'arcticicestudio/nord-vim'
 Plug '~/.fzf'
@@ -7,8 +6,12 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'vim-airline/vim-airline'
-
+Plug 'tomtom/tcomment_vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 call plug#end()
+
 filetype plugin indent on
 
 let g:mapleader=","
