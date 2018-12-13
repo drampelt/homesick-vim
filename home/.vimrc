@@ -1,128 +1,120 @@
-" don't bother with vi compatibility
-set nocompatible
+call plug#begin('~/.vim/plugged')
 
-" enable syntax highlighting
-syntax enable
+Plug 'tpope/vim-sensible'
+Plug 'arcticicestudio/nord-vim'
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'vim-airline/vim-airline'
 
-" configure Vundle
-filetype on " without this vim emits a zero exit status, later, because of :ft off
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#rc()
-
-" install Vundle bundles
-if filereadable(expand("~/.vimrc.bundles"))
-  source ~/.vimrc.bundles
-  source ~/.vimrc.bundles.local
-endif
-
-" ensure ftdetect et al work by including this after the Vundle stuff
+call plug#end()
 filetype plugin indent on
 
+let g:mapleader=","
+
+" Colorscheme
+colorscheme nord
+syntax enable
+
+" Tabs
+set tabstop=4
+set softtabstop=4
+set expandtab
+set shiftwidth=4
 set autoindent
-set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
-set backspace=2                                              " Fix broken backspace in some setups
-set backupcopy=yes                                           " see :help crontab
-set clipboard=unnamed                                        " yank and paste with the system clipboard
-set directory-=.                                             " don't store swapfiles in the current directory
-set encoding=utf-8
-set expandtab                                                " expand tabs to spaces
-set ignorecase                                               " case-insensitive search
-set incsearch                                                " search as you type
-set laststatus=2                                             " always show statusline
-set list                                                     " show trailing whitespace
-set listchars=tab:▸\ ,trail:▫
-set number                                                   " show line numbers
-set ruler                                                    " show where you are
-set scrolloff=3                                              " show context above/below cursorline
-set shiftwidth=2                                             " normal mode indentation commands use 2 spaces
+
+" Display
+set number
 set showcmd
-set smartcase                                                " case-sensitive search if any caps
-set softtabstop=2                                            " insert mode tab and backspace use 2 spaces
-set tabstop=8                                                " actual tabs occupy 8 characters
-set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
-set wildmenu                                                 " show a navigable menu for tab completion
-set wildmode=longest,list,full
-
-" Enable basic mouse behavior such as resizing buffers.
+set cursorline
+set wildmenu
+set lazyredraw
+set showmatch
 set mouse=a
-if exists('$TMUX')  " Support resizing in tmux
-  set ttymouse=xterm2
-endif
 
-" keyboard shortcuts
-let mapleader = ','
-" noremap <C-h> <C-w>h
-" noremap <C-j> <C-w>j
-" noremap <C-k> <C-w>k
-" noremap <C-l> <C-w>l
-noremap <leader>l :Align
-nnoremap <leader>a :Ag<space>
-nnoremap <leader>b :CtrlPBuffer<CR>
-nnoremap <leader>d :NERDTreeToggle<CR>
-nnoremap <leader>f :NERDTreeFind<CR>
-nnoremap <leader>t :CtrlP<CR>
-nnoremap <leader>T :CtrlPClearCache<CR>:CtrlP<CR>
-nnoremap <leader>] :TagbarToggle<CR>
-nnoremap <leader><space> :call whitespace#strip_trailing()<CR>
-nnoremap <leader>g :GitGutterToggle<CR>
-nnoremap <leader>c <Plug>Kwbd
-noremap <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+" Searching
+set incsearch
+set hlsearch
 
-" in case you forgot to sudo
-cnoremap w!! %!sudo tee > /dev/null %
+" Folding
+set foldenable
+set foldlevelstart=10
+set foldnestmax=10
+set foldmethod=indent
 
-" plugin settings
-let g:ctrlp_match_window = 'order:ttb,max:20'
-let g:NERDSpaceDelims=1
-let g:gitgutter_enabled = 0
+" Escape
+inoremap jj <esc>
 
-" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
+""" Colemak-Vim Mappings"""
+" - k/K is the new n/N.
+" - s/S is the new i/I ["inSert"].
+"
+" - l/L skip to the beginning and end of lines
+" - Ctrl-l joins lines
+" - r replaces i as the "inneR" modifier
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-endif
+" HNEI arrows. Swap 'gn'/'ge' and 'n'/'e'.
 
-" fdoc is yaml
-autocmd BufRead,BufNewFile *.fdoc set filetype=yaml
-" md is markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-autocmd BufRead,BufNewFile *.md set spell
-" extra rails.vim help
-autocmd User Rails silent! Rnavcommand decorator      app/decorators            -glob=**/* -suffix=_decorator.rb
-autocmd User Rails silent! Rnavcommand observer       app/observers             -glob=**/* -suffix=_observer.rb
-autocmd User Rails silent! Rnavcommand feature        features                  -glob=**/* -suffix=.feature
-autocmd User Rails silent! Rnavcommand job            app/jobs                  -glob=**/* -suffix=_job.rb
-autocmd User Rails silent! Rnavcommand mediator       app/mediators             -glob=**/* -suffix=_mediator.rb
-autocmd User Rails silent! Rnavcommand stepdefinition features/step_definitions -glob=**/* -suffix=_steps.rb
-" automatically rebalance windows on vim resize
-autocmd VimResized * :wincmd =
+noremap <expr> n (v:count == 0 ? 'gj' : 'j')
+noremap <expr> e (v:count == 0 ? 'gk' : 'k')
+noremap i l
 
-" Fix Cursor in TMUX
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
+noremap <C-e> <C-u>
+noremap <C-n> <C-d>
 
-" Don't copy the contents of an overwritten selection.
-vnoremap p "_dP
+" Switch panes.
+nnoremap H <C-w>h
+nnoremap I <C-w>l
+nnoremap N <C-w>j
+nnoremap E <C-w>k
 
-" Go crazy!
-if filereadable(expand("~/.vimrc.local"))
-  " In your .vimrc.local, you might like:
-  "
-  " set autowrite
-  " set nocursorline
-  " set nowritebackup
-  " set whichwrap+=<,>,h,l,[,] " Wrap arrow keys between lines
-  "
-  " autocmd! bufwritepost .vimrc source ~/.vimrc
-  " noremap! jj <ESC>
-  source ~/.vimrc.local
-endif
+" Switch buffers.
+nnoremap <C-i> :tabnext<CR>
+nnoremap <C-h> :tabprevious<CR>
+
+" Last search.
+noremap k n
+noremap K N
+
+" _r_ = inneR text objects.
+onoremap r i
+
+" Easy mappings for BOL EOL
+noremap l g^
+noremap L g$
+
+"""Misc Mappings"""
+noremap ; :
+noremap : ;
+noremap U <C-r>
+nnoremap <CR> o<Esc>
+nnoremap <silent> j :noh<CR>
+noremap <silent> _ :TComment<CR>
+nnoremap p p=`]
+noremap s i
+noremap S I
+noremap <space> i
+inoremap <C-e> <C-p>
+inoremap <C-p> <C-r>
+
+" NERDTree
+" nnoremap <silent> <Leader><Leader> :NERDTreeToggle<CR>
+nnoremap <silent> <Leader><Leader> :NERDTreeTabsToggle<CR>
+let g:NERDTreeMenuDown='n'
+let g:NERDTreeMenuUp='e'
+let g:NERDTreeMapOpenExpl=''
+let g:NERDTreeMapToggleHidden='H'
+let g:NERDTreeChDirMode = 2              " Vim's cwd follows NERDTree's cwd.
+let g:NERDTreeMapJumpFirstChild = "ge"
+let g:NERDTreeMapJumpLastChild = "gn"
+let g:NERDTreeMapOpenExpl = ""
+let g:NERDTreeMapOpenSplit = "S"
+let g:NERDTreeQuitOnOpen = 0             " Stay open.
+
+" Airline
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
+" FZF
+noremap <silent> <C-p> :Files<CR>
