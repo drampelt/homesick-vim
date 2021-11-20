@@ -10,6 +10,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 filetype plugin indent on
@@ -26,6 +27,9 @@ set softtabstop=4
 set expandtab
 set shiftwidth=4
 set autoindent
+
+autocmd Filetype coffee setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2
 
 " Display
 set number
@@ -121,3 +125,12 @@ let g:airline#extensions#tabline#enabled = 1
 
 " FZF
 noremap <silent> <C-p> :Files<CR>
+
+" Clipboard
+set clipboard=unnamed
+
+" Nerdtree
+let g:nerdtree_tabs_open_on_gui_startup = 0
+
+" Macvim
+set guifont=Droid\ Sans\ Mono\ Slashed\ for\ Powerline:h13
